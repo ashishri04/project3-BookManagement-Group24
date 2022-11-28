@@ -1,5 +1,6 @@
 const userModel = require("../models/userModel")
 const valid = require("../validation/validation")
+const jwt=require("jsonwebtoken")
 
 const userCreation = async (req, res) => {
 
@@ -8,38 +9,28 @@ const userCreation = async (req, res) => {
 
         const { title, name, phone, email, password, address } = requestBody
         if (!valid.isValidRequestBody) {
-            return res.status(400).send({ status: false, msg: "Pls  request body can't be Empty" })
-        }
-        if (!name) {
-            return res.status(400).send({ status: false, msg: "Name is Mandatory" })
+            return res.status(400).send({ status: false, msg: "request body can't be Empty" })
         }
         if (!title) {
             return res.status(400).send({ status: false, msg: "title is Mandatory" })
         }
+        
+        if (!valid.isValidtitle(title)) {
+            return res.status(400).send({ status: false, msg: "title should be MR,Mrs,Miss" })
+        }
+        if (!name) {
+            return res.status(400).send({ status: false, msg: "Name is Mandatory" })
+        }
+       
+        if (!valid.isValidName(name)) {
+            return res.status(400).send({ status: false, msg: "invalid Name " })
+        }
         if (!phone) {
             return res.status(400).send({ status: false, msg: "phone is Mandatory" })
         }
-        if (!email) {
-            return res.status(400).send({ status: false, msg: "email is Mandatory" })
-        }
-
-
-        if (!valid.invalidInput(title)) {
-            return res.status(400).send({ status: false, msg: "tittle Can't be empty" })
-        }
-
-        if (!valid.isValidtitle(title)) {
-            return res.status(400).send({ status: false, msg: "title should be MR,MRs,Miss" })
-        }
-        if (!valid.invalidInput(name)) {
-            return res.status(400).send({ status: false, msg: "name Can't be empty" })
-        }
-
-        if (!valid.invalidInput(phone)) {
-            return res.status(400).send({ status: false, msg: "phone Can't be empty" })
-        }
+       
         if (!valid.validatePhone(phone)) {
-            return res.status(400).send({ status: false, msg: "pls provide correct phone  number" })
+            return res.status(400).send({ status: false, msg: "pls provide correct phone " })
         }
 
         const usedPhone = await userModel.findOne({ phone })
@@ -50,9 +41,7 @@ const userCreation = async (req, res) => {
         if (!email) {
             return res.status(400).send({ status: false, msg: "email is mandatory" })
         }
-        if (!valid.invalidInput(email)) {
-            return res.status(400).send({ status: false, msg: "email Can't be empty" })
-        }
+       
         if (!valid.isValidEmail(email)) {
             return res.status(400).send({ status: false, msg: "Invalid email id" })
 
@@ -65,7 +54,7 @@ const userCreation = async (req, res) => {
             return res.status(400).send({ status: false, msg: "password is Mandatory" })
         }
         if (!valid.isValidPassword(password)) {
-            return res.status(400).send({ status: false, msg: "password shpuld be of length 8-15 " })
+            return res.status(400).send({ status: false, msg: " invalid password" })
         }
         if (!address) {
             return res.status(400).send({ status: false, msg: "address is Mandatory" })
@@ -73,11 +62,11 @@ const userCreation = async (req, res) => {
         if (!valid.invalidInput(address.street)) {
             return res.status(400).send({ status: false, msg: " Pls provide street name " })
         }
-        if (!valid.invalidInput(address.city)) {
+        if (!valid.isValidName(address.city)) {
             return res.status(400).send({ status: false, msg: " Pls provide city name " })
         }
-        if (!valid.invalidInput(address.pincode)) {
-            return res.status(400).send({ status: false, msg: " Pls provide pincode " })
+        if (!valid.validPin(address.pincode)) {
+            return res.status(400).send({ status: false, msg: " Pls provide  valid pincode " })
         }
 
         const createUser = await userModel.create(requestBody)
@@ -91,4 +80,52 @@ const userCreation = async (req, res) => {
 }
 
 
-module.exports = { userCreation }
+
+const userLogin =async (req,res)=>{
+
+
+try{
+     
+     let requestBody=req.body
+     let {email,password}=requestBody
+   
+     if(!valid.isValidRequestBody(requestBody)){
+        return res.status(400).send({ status: false, msg: "  request body can't be Empty" })
+     }
+   if(!email){
+    return res.status(400).send({ status: false, msg: " email can't be Empty" })
+   }
+   if(!valid.isValidEmail(email)){
+    return res.status(400).send({ status: false, msg: "Pls provide valid email" })
+   }
+   if(!password){
+    return res.status(400).send({ status: false, msg: "  password can't be Empty" })
+   }
+   if(!valid.isValidPassword(password)){
+    return res.status(400).send({ status: false, msg: "Pls provide valid password" })
+   }
+   if(email && password){
+    let checkAvailability = await userModel.findOne({email:email,password:password})
+    if(checkAvailability){
+        let token = jwt.sign({userId:checkAvailability._id},"secret",{expiresIn:"600s"})
+        return res.status(200).send({status:true,token:token})
+    }else{
+        return res.status(404).send({status:false,msg:"Invalid credentials"})
+    }
+   }
+
+
+
+}
+catch(err){
+    return res.status(500).send({status:false,msg:err.message})
+}
+
+
+}
+
+
+
+
+
+module.exports = { userCreation ,userLogin}

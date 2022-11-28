@@ -1,3 +1,11 @@
+const mongoose=require("mongoose")
+
+
+const isValidObjectId = function (Id) {
+     return mongoose.Types.ObjectId.isValid(Id)
+     } 
+
+
 const isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0
 }
@@ -8,6 +16,10 @@ const invalidInput = function (value) {
 return true;
 }
 
+const isValidName = (value) => {
+    const regex =/^[a-zA-Z ]+(([',. -][a-zA-Z ])?[a-zA-Z ])$/.test(value)
+    return regex
+}
 
 
 function isValidtitle(title) {
@@ -31,4 +43,15 @@ const isValidPassword = function (password) {
     const passwordRegex =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/
     return passwordRegex.test(password);
   };
-module.exports = {isValidRequestBody,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword}
+
+  const validateISBN = function (ISBN) { 
+    var re = /^(?:ISBN(?:-13)?:?\ )?(?=[0-9]{13}$|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17}$)97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9]$/;   
+    return re.test(ISBN.trim())
+    //format (978-0-618-05676-7)
+};
+
+const validPin = function(pincode){
+    let re =/^[0-9]{6,6}$/
+    return re.test(pincode)
+}
+module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin}

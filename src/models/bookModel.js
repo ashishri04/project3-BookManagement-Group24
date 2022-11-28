@@ -16,7 +16,7 @@ const bookSchema = new mongoose.Schema({
     userId:{
         type: ObjectId,
         required: true,
-        ref:User
+        ref:"User"
     },
     ISBN: {
         type: String,
@@ -30,7 +30,7 @@ const bookSchema = new mongoose.Schema({
         trim : true
     },
 
-    subcategory: {
+    subCategory: {
         type: String,
         required: true,
         trim : true,
@@ -50,6 +50,7 @@ const bookSchema = new mongoose.Schema({
     releasedAt:{
         type: Date,
         required: true,
+        format:"YYYY-MM-DD"
     }
 },{timestamps: true})
 module.exports= mongoose.model('Book',bookSchema)
