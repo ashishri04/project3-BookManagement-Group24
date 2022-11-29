@@ -60,4 +60,21 @@ const isValidStreet = function (street){
     return re.test(street)
 
 }
-module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet}
+function onlyNumbers(val){
+    if(val < 1 || val > 5){
+        return false
+    }
+    val = val.toString().split("")
+
+    for(let ele of val){
+        if(ele == "."){
+            return false
+        }
+    }
+    return true
+}
+const regexName = function(regex){
+   let re= /^[a-zA-Z ]{2,30}$/
+   return re.test(regex)
+}
+module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet,onlyNumbers,regexName}
