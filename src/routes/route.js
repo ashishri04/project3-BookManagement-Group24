@@ -14,4 +14,9 @@ router.post("/books",bookController.bookCreation)
 
 router.get("/books",bookController.getBooksQuery)
 
+router.get("/books/:bookId",bookController.bookById)
+
+
+
+
 module.exports =router

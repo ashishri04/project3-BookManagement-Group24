@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel")
 const bookModel = require("../models/bookModel")
 const valid = require("../validation/validation")
+const reviewModel = require("../models/reviewModel")
 
 const bookCreation = async (req, res) => {
 
@@ -103,9 +104,40 @@ const getBooksQuery = async (req, res) => {
     }
 };
 
+const bookById = async function (req, res) {
+
+    try {
+
+        const reqBookId = req.params.bookId
+
+        if (!valid.invalidInput(reqBookId)) {
+            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+        }
+        if (!valid.isValidObjectId(reqBookId)) {
+            return res.status(404).send({ status: false, msg: "invalid bookId" })
+        }
+        let bookInfo = await bookModel.findOne({ _id: reqBookId, isDeleted: false })
+        if (!bookInfo) {
+            return res.status(404).send({ status: false, msg: "book not found" })
+        }
+
+        let reviewData = await reviewModel.find({ bookId: reqBookId, isDeleted: false })
+        const responseData = bookInfo.toObject()
+        responseData["reviews"] = reviewData
+
+        return res.status(200).send({ status: true, msg: " fetching review data successfuly", data: responseData })
+
+
+
+
+    } catch (err) {
+        return res.status(500).send({ status: false, msg: err.message })
+    }
+}
+
 
  
- 
 
 
-module.exports = { bookCreation, getBooksQuery}
+
+module.exports = { bookCreation, getBooksQuery,bookById}
