@@ -39,7 +39,7 @@ const bookCreation = async (req, res) => {
             return res.status(400).send({ status: false, msg: "pls provide valid userID" })
 
         }
-        let checkUserId = await userModel.findById({_id: userId })
+        let checkUserId = await userModel.findById({ _id: userId })
         if (!checkUserId) {
             return res.status(400).send({ status: false, msg: " userId doesn't exist" })
 
@@ -78,8 +78,8 @@ const bookCreation = async (req, res) => {
             return res.status(400).send({ status: false, msg: "date should be in YYYY-MM-YY " })
         }
 
-const bookDetails = await bookModel.create(requestBody)
-  return res.status(200).send({status:false,msg:"book created successfully",data:bookDetails})
+        const bookDetails = await bookModel.create(requestBody)
+        return res.status(200).send({ status: false, msg: "book created successfully", data: bookDetails })
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
     }
@@ -87,4 +87,7 @@ const bookDetails = await bookModel.create(requestBody)
 
 }
 
-module.exports = { bookCreation}
+
+
+
+module.exports = { bookCreation }
