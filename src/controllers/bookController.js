@@ -2,13 +2,15 @@ const userModel = require("../models/userModel")
 const bookModel = require("../models/bookModel")
 const valid = require("../validation/validation")
 const reviewModel = require("../models/reviewModel")
+const { isValidObjectId } = require("mongoose")
+const ObjectId = require('mongoose').Types.ObjectId
 
 const bookCreation = async (req, res) => {
 
     try {
         let requestBody = req.body
 
-        let { title, excerpt, userId, ISBN, category, subCategory, releasedAt } = requestBody
+        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
         if (!valid.isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, msg: "request body can't be Empty" })
         }
@@ -60,11 +62,11 @@ const bookCreation = async (req, res) => {
         if (!valid.isValidName(category)) {
             return res.status(400).send({ status: false, msg: "Invalid category " })
         }
-        if (!subCategory) {
-            return res.status(400).send({ status: false, msg: "subCategory is mandatory " })
+        if (!subcategory) {
+            return res.status(400).send({ status: false, msg: "subcategory is mandatory " })
         }
-        if (!valid.invalidInput(subCategory)) {
-            return res.status(400).send({ status: false, msg: "Invlid subCategory " })
+        if (!valid.invalidInput(subcategory)) {
+            return res.status(400).send({ status: false, msg: "Invlid subcategory " })
         }
         if (!releasedAt) {
             return res.status(400).send({ status: false, msg: "releasedAt is mandatory " })
@@ -80,7 +82,9 @@ const bookDetails = await bookModel.create(requestBody)
     }
 }
 
-//===========================================getBooksQuery==============================================>
+// //===========================================getBooksQuery==============================================>
+
+
 const getBooksQuery = async (req, res) => {
     try {
         const reqBody = req.query;
@@ -100,7 +104,7 @@ const getBooksQuery = async (req, res) => {
             }
             //-------------------------------book finding----------------------------
             const books = await bookModel.find({ $and: [{ isDeleted: false }, reqBody] }).select({
-             title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).collation({ locale: "en" }).sort({ title: 1 });
+             title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1,subcategory:1 }).collation({ locale: "en" }).sort({ title: 1 });
 
             if (books.length === 0)
                 return res.status(404).send({ status: false, message: 'Book is not found.' });
@@ -114,6 +118,8 @@ const getBooksQuery = async (req, res) => {
         res.status(500).send({ status: false, error: err.message });
     }
 };
+
+
 
 const bookById = async function (req, res) {
 
@@ -188,9 +194,9 @@ const updateBook = async function (req, res) {
         if (!ISBN) {
             return res.status(400).send({ status: false, msg: "ISBN is mandatory" })
         }
-        if (!valid.validateISBN(ISBN)) {
-            return res.status(400).send({ status: false, msg: " Invalid ISBN  format" })
-        }
+        // if (!valid.validateISBN(ISBN)) {
+            // return res.status(400).send({ status: false, msg: " Invalid ISBN  format" })
+        // }
         let usedISBN = await bookModel.findOne({ ISBN })
 
         if (usedISBN) {
