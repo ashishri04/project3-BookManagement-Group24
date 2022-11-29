@@ -16,6 +16,8 @@ router.get("/books",bookController.getBooksQuery)
 
 router.get("/books/:bookId",bookController.bookById)
 
+router.put("/books/:bookId",bookController.updateBook)
+
 
 
 

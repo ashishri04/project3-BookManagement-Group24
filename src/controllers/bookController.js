@@ -135,9 +135,81 @@ const bookById = async function (req, res) {
     }
 }
 
+const updateBook = async function (req, res) {
+
+    try {
+        const requestBody = req.body
+        const reqBook = req.params.bookId
+
+        if (!valid.invalidInput(reqBook)) {
+            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+        }
+        if (!valid.isValidObjectId(reqBook)) {
+            return res.status(404).send({ status: false, msg: "invalid bookId" })
+        }
+          if(reqBook){
+            const checkId = await bookModel.findOne({_id:reqBook})
+            if(!checkId)
+            return res.status(404).send({status:false,msg:"book Id not found"})
+          }
+
+        let { title, excerpt, releasedAt, ISBN } = requestBody
+        
+        if (!title) {
+            return res.status(400).send({ status: false, msg: "title of book is mandatory " })
+        }
+        if (!valid.invalidInput(title)) {
+            return res.status(400).send({ status: false, msg: "invalid title input" })
+        }
+
+        let usedTitle = await bookModel.findOne({ title })
+        if (usedTitle) {
+            return res.status(400).send({ status: false, msg: " title is already taken" })
+        }
+        
+        if (!excerpt) {
+            return res.status(400).send({ status: false, msg: "excerpt is mandatory" })
+        }
+        if (!valid.invalidInput(excerpt)) {
+            return res.status(400).send({ status: false, msg: " pls provide excerpt for book" })
+
+        }
+        if (!ISBN) {
+            return res.status(400).send({ status: false, msg: "ISBN is mandatory" })
+        }
+        if (!valid.validateISBN(ISBN)) {
+            return res.status(400).send({ status: false, msg: " Invalid ISBN  format" })
+        }
+        let usedISBN = await bookModel.findOne({ ISBN })
+
+        if (usedISBN) {
+            return res.status(400).send({ status: false, msg: " ISBN is already used" })
+        }
+        if (!releasedAt) {
+            return res.status(400).send({ status: false, msg: "releasedAt is mandatory " })
+        }
+        if (!valid.invalidInput(releasedAt)) {
+            return res.status(400).send({ status: false, msg: "date should be in YYYY-MM-YY " })
+        }
+
+        const updating = await bookModel.findByIdAndUpdate({ _id: reqBook, isDeleted: false }, {  title:title, excerpt:excerpt, releasedAt:releasedAt, ISBN:ISBN}, { new: true }).select({deletedAt:0})
+
+        if (!updating) {
+            return res.status(404).send({ status: false, msg: "book updatation failed" })
+        } else {
+            return res.status(200).send({ status: true, msg: "book updated successfully", data: updating })
+        }
+    }
+    catch (err) {
+        return res.status(500).send({ status: false, msg: err.msg })
+    }
+}
+
+
+
 
  
 
 
 
-module.exports = { bookCreation, getBooksQuery,bookById}
+module.exports = { bookCreation, getBooksQuery,bookById,updateBook}
