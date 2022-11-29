@@ -80,27 +80,25 @@ const bookCreation = async (req, res) => {
 }
 
 // //===========================================getBooksQuery==============================================>
- const getBooksQuery = async (req, res) => {
-     try {
-        const reqBody = req.query;
-        const { userId, category, subcategory } = reqBody
+// const getBooksQuery = async (req, res) => {
+//     try {
+//         const reqBody = req.query;
+//         const { userId, category, subcategory } = reqBody
 
-        if ((Object.keys(reqBody).length === 0) || (userId || category || subcategory)) {
+//         if ((Object.keys(reqBody).length === 0) || (userId || category || subcategory)) {
 //             //-------------------------------book finding----------------------------
-          const books = await bookModel.find({ $and: [{ isDeleted: false }, reqBody] }).select({
-              title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 });
+//             const books = await bookModel.find({ $and: [{ isDeleted: false }, reqBody] }).select({
+//              title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 });
 
-             if (books.length === 0)
-                 return res.status(404).send({ status: false, message: 'Book is not found.' });
+//             if (books.length === 0)
+//                 return res.status(404).send({ status: false, message: 'Book is not found.' });
 
-            return res.status(200).send({ status: true, message: 'Books list', data: books });
+//             return res.status(200).send({ status: true, message: 'Books list', data: books });
 
-        } else
-            return res.status(400).send({ status: false, message: 'Invalid query' });
+//         } else
+//             return res.status(400).send({ status: false, message: 'Invalid query' });
 
-    } catch (err) {
-         res.status(500).send({ status: false, error: err.message });
-     }
- };
-
-module.exports = { bookCreation, getBooksQuery}
+//     } catch (err) {
+//         res.status(500).send({ status: false, error: err.message });
+//     }
+// };
