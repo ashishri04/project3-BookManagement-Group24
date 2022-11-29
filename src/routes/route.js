@@ -18,7 +18,12 @@ router.get("/books/:bookId",bookController.bookById)
 
 router.put("/books/:bookId",bookController.updateBook)
 
+router.delete("/books/:bookId",bookController.bookDeletion)
+
+    
+
 
 
 
 module.exports =router
+   

@@ -93,7 +93,7 @@
 - If the book has no reviews then the response body should include book detail as shown [here](#book-details-response-no-reviews) and an empty array for reviewsData.
 - If no documents are found then return an HTTP status 404 with a response like [this](#error-response-structure) 
 
-### PUT /books/:bookId
+### PUT /books/:bookId      
 - Update a book by changing its
   - title
   - excerpt
@@ -116,7 +116,7 @@
 - Update the related book document by increasing its review count
 - Return the updated book document with reviews data on successful operation. The response body should be in the form of JSON object like [this](#successful-response-structure)
 
-### PUT /books/:bookId/review/:reviewId
+### PUT /books/:bookId/review/:reviewId 
 - Update the review - review, rating, reviewer's name.
 - Check if the bookId exists and is not deleted before updating the review. Check if the review exist before updating the review. Send an error response with appropirate status code like [this](#error-response-structure) if the book does not exist
 - Get review details like review, rating, reviewer's name in request body.
