@@ -84,9 +84,9 @@ const bookDetails = await bookModel.create(requestBody)
 const getBooksQuery = async (req, res) => {
     try {
         const reqBody = req.query;
-        const { userId, category, subcategory } = reqBody
+        const { userId, category, subCategory } = reqBody
 
-        if ((Object.keys(reqBody).length === 0) || (userId || category || subcategory)) {
+        if ((Object.keys(reqBody).length === 0) || (userId || category || subCategory)) {
             if(reqBody.userId){
                
         
