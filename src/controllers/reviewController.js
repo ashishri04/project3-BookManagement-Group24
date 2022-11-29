@@ -30,7 +30,7 @@ const createReview = async function(req, res){
             if (!valid.invalidInput(reviewedBy)) {
                 return res.status(400).send({ status: false, msg: "reviewers name is in proper format" })
             }
-             if(!regexName.test(reviewedBy))
+             if(!valid.regexName.test(reviewedBy))
              return res.status(400).send({ status: false, msg: "reviewers name is invalid" })
            
                 Obj.reviewedBy=req.body.reviewedBy
@@ -54,7 +54,7 @@ const createReview = async function(req, res){
     if(!(typeof rating ==="number")){
       return res.status(400).send({status:false, msg:"rating should be a number"})
     }
-      if (!onlyNumbers(rating))
+      if (!valid.onlyNumbers(rating))
       return res.status(400).send({status:false, msg:"rating should be between 1 to 5"})
       }
 
@@ -123,7 +123,7 @@ try {
       if(!(typeof rating ==="number")){
         return res.status(400).send({status:false, msg:"rating should be a number"})
       }
-        if (!onlyNumbers(rating))
+        if (!valid.onlyNumbers(rating))
         return res.status(400).send({status:false, msg:"rating should be between 1 to 5"})
     }
         
@@ -212,5 +212,5 @@ catch (err) {
 
 
 
-module.exports = { createReview, updateReview, deleteReview }
+module.exports = { createReview, updateReview, deleteReview,}
 
