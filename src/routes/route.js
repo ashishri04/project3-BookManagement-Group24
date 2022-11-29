@@ -11,4 +11,6 @@ router.post("/login",userController.userLogin)
 
 router.post("/books",bookController.bookCreation)
 
+router.get("/books",bookController.getBooksQuery)
+
 module.exports =router
