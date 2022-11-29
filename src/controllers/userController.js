@@ -59,14 +59,14 @@ const userCreation = async (req, res) => {
         if (!address) {
             return res.status(400).send({ status: false, msg: "address is Mandatory" })
         }
-        if (!valid.invalidInput(address.street)) {
-            return res.status(400).send({ status: false, msg: " Pls provide street name " })
+        if (!valid.isValidStreet(address.street)) {
+            return res.status(400).send({ status: false, msg: " invalid  street name " })
         }
         if (!valid.isValidName(address.city)) {
-            return res.status(400).send({ status: false, msg: " Pls provide city name " })
+            return res.status(400).send({ status: false, msg: " invalid city name " })
         }
         if (!valid.validPin(address.pincode)) {
-            return res.status(400).send({ status: false, msg: " Pls provide  valid pincode " })
+            return res.status(400).send({ status: false, msg: " invalid  pincode " })
         }
 
         const createUser = await userModel.create(requestBody)
@@ -99,7 +99,7 @@ try{
     return res.status(400).send({ status: false, msg: "Pls provide valid email" })
    }
    if(!password){
-    return res.status(400).send({ status: false, msg: "  password can't be Empty" })
+    return res.status(400).send({ status: false, msg: "password can't be Empty" })
    }
    if(!valid.isValidPassword(password)){
     return res.status(400).send({ status: false, msg: "Pls provide valid password" })
