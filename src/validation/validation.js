@@ -54,4 +54,10 @@ const validPin = function(pincode){
     let re =/^[0-9]{6,6}$/
     return re.test(pincode)
 }
-module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin}
+const isValidStreet = function (street){
+    let re = /^.*?\s[N]{0,1}([-a-zA-Z0-9]+)\s*\w*$/
+
+    return re.test(street)
+
+}
+module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet}
