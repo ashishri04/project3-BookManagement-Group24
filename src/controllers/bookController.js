@@ -123,7 +123,7 @@ const bookById = async function (req, res) {
 
         let reviewData = await reviewModel.find({ bookId: reqBookId, isDeleted: false })
         const responseData = bookInfo.toObject()
-        responseData["reviews"] = reviewData
+        responseData.reviews = reviewData
 
         return res.status(200).send({ status: true, msg: " fetching review data successfuly", data: responseData })
 
