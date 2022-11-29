@@ -89,7 +89,7 @@ const getBooksQuery = async (req, res) => {
         if ((Object.keys(reqBody).length === 0) || (userId || category || subcategory)) {
             //-------------------------------book finding----------------------------
             const books = await bookModel.find({ $and: [{ isDeleted: false }, reqBody] }).select({
-             title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 });
+             title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).collation({ locale: "en" }).sort({ title: 1 });
 
             if (books.length === 0)
                 return res.status(404).send({ status: false, message: 'Book is not found.' });
