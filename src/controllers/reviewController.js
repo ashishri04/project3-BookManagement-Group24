@@ -2,8 +2,6 @@ const reviewModel = require('../models/reviewModel')
 const userModel = require('../models/userModel')
 const bookModel = require('../models/bookModel')
 const valid = require('../validation/validation')
-const mongoose = require('mongoose')
-//const moment = require('moment')
 
 
 const createReview = async function(req, res){
@@ -30,19 +28,14 @@ const createReview = async function(req, res){
             if (!valid.invalidInput(reviewedBy)) {
                 return res.status(400).send({ status: false, msg: "reviewers name is in proper format" })
             }
-             if(!valid.regexName.test(reviewedBy))
+             if(!valid.isValidName(reviewedBy))
              return res.status(400).send({ status: false, msg: "reviewers name is invalid" })
            
                 Obj.reviewedBy=req.body.reviewedBy
         }else{
             Obj.reviewedBy="Guest"
         }
-          if(reviewedAt){
-            if(!regexDate.test(reviewedAt)){
-                return res.status(400).send({ status: false,msg: "please provide valid date" })
-            }
-            Obj.reviewedAt = reviewedAt
-          }
+      
         if (!reviewedAt) {
             Obj.reviewedAt= Date.now()
     }
@@ -111,7 +104,7 @@ try {
         if (!valid.invalidInput(reviewedBy)) {
             return res.status(400).send({ status: false, msg: "please provide reviewedBy in proper format." })
         };
-        if (!regexName.test(reviewedBy)) {
+        if (!valid.isValidName(reviewedBy)) {
             return res.status(400).send({ status: false, msg: "reviewedBy is invalid" })
         }
     }
@@ -212,5 +205,5 @@ catch (err) {
 
 
 
-module.exports = { createReview, updateReview, deleteReview,}
+module.exports = { createReview, updateReview, deleteReview}
 

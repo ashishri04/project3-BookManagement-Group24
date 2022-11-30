@@ -107,7 +107,7 @@ try{
    if(email && password){
     let checkAvailability = await userModel.findOne({email:email,password:password})
     if(checkAvailability){
-        let token = jwt.sign({userId:checkAvailability._id},"secret",{expiresIn:"600s"})
+        let token = jwt.sign({userId:checkAvailability._id},"secret",{expiresIn:"10h"})
         return res.status(200).send({status:true,token:token})
     }else{
         return res.status(404).send({status:false,msg:"Invalid credentials"})

@@ -45,9 +45,8 @@ const isValidPassword = function (password) {
   };
 
   const validateISBN = function (ISBN) { 
-    var re = /^(?:ISBN(?:-13)?:?\ )?(?=[0-9]{13}$|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17}$)97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9]$/;   
+    var re = /^(?=(?:\D*\d){13}(?:(?:\D*\d){3})?(?:(?:\D*\d){7})?$)/;   
     return re.test(ISBN.trim())
-    //format (978-0-618-05676-7)
 };
 
 const validPin = function(pincode){
@@ -73,8 +72,17 @@ function onlyNumbers(val){
     }
     return true
 }
+
+
 const regexName = function(regex){
    let re= /^[a-zA-Z ]{2,30}$/
    return re.test(regex)
 }
+
+
+
+
+
+
+
 module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet,onlyNumbers,regexName}
