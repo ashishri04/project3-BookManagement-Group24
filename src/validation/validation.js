@@ -50,6 +50,13 @@ const isValidPassword = function (password) {
     //format (978-0-618-05676-7)
 };
 
+
+const date=function(value){
+    var regEx = /^\d{4}-\d{2}-\d{2}$/
+    return regEx.test(value)
+}
+
+
 const validPin = function(pincode){
     let re =/^[0-9]{6,6}$/
     return re.test(pincode)
@@ -73,8 +80,6 @@ function onlyNumbers(val){
     }
     return true
 }
-const regexName = function(regex){
-   let re= /^[a-zA-Z ]{2,30}$/
-   return re.test(regex)
-}
-module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet,onlyNumbers,regexName}
+
+
+module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet,onlyNumbers}
