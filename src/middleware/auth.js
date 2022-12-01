@@ -25,27 +25,27 @@ const authorization = async (req, res, next) => {
     try {
         
             let token = req.headers["x-api-key"];
-            let decodedtoken = jwt.verify(token, "secret")
+            let decodedToken = jwt.verify(token, "secret")
     
             let bookId = req.params.bookId
             if (bookId) {
     
-                let checkUserId = await bookModel.find({ _id: bookId }).select({ userId: 1, _id: 0 })
-                let userId = checkUserId.map(x => x.userId)  // this is the userId of the book to be updated
+             let userId =    await bookModel.find({ _id: bookId }).select({ userId: 1, _id: 0 })
+ 
     
-                let id = decodedtoken.userId
+                let id = decodedToken.userId
                 if (id != userId) return res.status(403).send({ status: false, msg: "You are not authorised to perform this task" })
             }
             else {
-                bookId = req.body.userId
-                let id = decodedtoken.userId
+                let userID = req.body.userId
+                let ID = decodedToken.userId
                 
     
-                if (id != bookId) return res.status(403).send({ status: false, msg: 'You are not authorised to perform this task' })
+                if (ID!= userID) return res.status(403).send({ status: false, msg: 'You are not authorised to perform this task' })
             }
     
             next();
-    }
+    }    
 
     catch (err) {
         res.status(500).send({ status: false, error: err.message }) 
