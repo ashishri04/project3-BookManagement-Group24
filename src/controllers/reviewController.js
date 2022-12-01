@@ -56,6 +56,9 @@ const createReview = async function(req, res){
     
     Obj.rating=rating
 
+    if(!valid.invalidInput(review)){
+        return res.status(400).send({status:false, msg:"Pls provide valid input for review"})
+    }
       Obj.review=review
 
     if (isDeleted == true) {
@@ -124,6 +127,9 @@ try {
     
     Obj1.rating=rating
 
+    if(!valid.invalidInput(review)){
+        return res.status(400).send({status:false, msg:"Pls provide valid input for review"})
+    }
       Obj1.review=review
 
    
