@@ -3,7 +3,7 @@ const bookModel = require("../models/bookModel")
 const valid = require("../validation/validation")
 const reviewModel = require("../models/reviewModel")
 
-//const moment = require('moment')
+
 
 
 
@@ -73,12 +73,9 @@ const bookCreation = async (req, res) => {
         if (!releasedAt) {
             return res.status(400).send({ status: false, msg: "releasedAt is mandatory " })
         }
-
-        if (!moment.utc(releasedAt, "YYYY-MM-DD", true).isValid())
-            return res.status(400).send({ status: false, message: "enter date in valid format eg. (YYYY-MM-DD)...!" })
-            
-        if (!valid.invalidInput(releasedAt)) {
-            return res.status(400).send({ status: false, msg: "date should be in YYYY-MM-YY " })
+  
+        if (!valid.date(releasedAt)) {
+            return res.status(400).send({ status: false, msg: " Released Date should be in format of YYYY-MM-YY " })
         }
 
 const bookDetails = await bookModel.create(requestBody)
@@ -251,12 +248,5 @@ const bookDeletion = async function (req, res) {
         return res.status(500).send({ status: false, msg: err.message })
     }
 }
-
-
-
-
- 
-
-
 
 module.exports = { bookCreation, getBooksQuery,bookById,updateBook,bookDeletion}

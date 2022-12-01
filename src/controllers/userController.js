@@ -84,45 +84,45 @@ const userCreation = async (req, res) => {
 const userLogin =async (req,res)=>{
 
 
-try{
-     
-     let requestBody=req.body
-     let {email,password}=requestBody
-   
-     if(!valid.isValidRequestBody(requestBody)){
-        return res.status(400).send({ status: false, msg: "  request body can't be Empty" })
-     }
-   if(!email){
-    return res.status(400).send({ status: false, msg: " email can't be Empty" })
-   }
-   if(!valid.isValidEmail(email)){
-    return res.status(400).send({ status: false, msg: "Pls provide valid email" })
-   }
-   if(!password){
-    return res.status(400).send({ status: false, msg: "password can't be Empty" })
-   }
-   if(!valid.isValidPassword(password)){
-    return res.status(400).send({ status: false, msg: "Pls provide valid password" })
-   }
-   if(email && password){
-    let checkAvailability = await userModel.findOne({email:email,password:password})
-    if(checkAvailability){
-        let token = jwt.sign({userId:checkAvailability._id},"secret",{expiresIn:"10h"})
-        return res.status(200).send({status:true,token:token})
-    }else{
-        return res.status(404).send({status:false,msg:"Invalid credentials"})
+    try{
+         
+         let requestBody=req.body
+         let {email,password}=requestBody
+       
+         if(!valid.isValidRequestBody(requestBody)){
+            return res.status(400).send({ status: false, msg: "  request body can't be Empty" })
+         }
+       if(!email){
+        return res.status(400).send({ status: false, msg: " email can't be Empty" })
+       }
+       if(!valid.isValidEmail(email)){
+        return res.status(400).send({ status: false, msg: "Pls provide valid email" })
+       }
+       if(!password){
+        return res.status(400).send({ status: false, msg: "password can't be Empty" })
+       }
+       if(!valid.isValidPassword(password)){
+        return res.status(400).send({ status: false, msg: "Pls provide valid password" })
+       }
+       if(email && password){
+        let checkAvailability = await userModel.findOne({email:email,password:password})
+        if(checkAvailability){
+            let token = jwt.sign({userId:checkAvailability._id},"secret",{expiresIn:"10h"})
+            return res.status(200).send({status:true,token:token})
+        }else{
+            return res.status(404).send({status:false,msg:"Invalid credentials"})
+        }
+       }
+    
+    
+    
+    }  
+    catch(err){
+        return res.status(500).send({status:false,msg:err.message})
     }
-   }
-
-
-
-}
-catch(err){
-    return res.status(500).send({status:false,msg:err.message})
-}
-
-
-}
+    
+    
+    }
 
 
 
