@@ -11,15 +11,15 @@ router.post("/register",userController.userCreation)
 
 router.post("/login",userController.userLogin)
 
-router.post("/books",authentication,bookController.bookCreation)
+router.post("/books",authentication,authorization,bookController.bookCreation)
 
 router.get("/books",bookController.getBooksQuery)
 
 router.get("/books/:bookId",bookController.bookById)
 
-router.put("/books/:bookId",bookController.updateBook)
+router.put("/books/:bookId",authentication,authorization,bookController.updateBook)
 
-router.delete("/books/:bookId",authorization,bookController.bookDeletion)
+router.delete("/books/:bookId",authentication,authorization,bookController.bookDeletion)
 
 router.post("/books/:bookId/review", reviewController.createReview)
 
