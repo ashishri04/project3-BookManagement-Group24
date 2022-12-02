@@ -5,7 +5,7 @@ const reviewModel = require("../models/reviewModel")
 
 
 
-
+//================================book create==============================================================================
 
 const bookCreation = async (req, res) => {
 
@@ -85,6 +85,7 @@ const bookDetails = await bookModel.create(requestBody)
     }
 }
 
+//===================================get book by query=========================================================
 
 const getBooksQuery = async (req, res) => {
     try {
@@ -120,7 +121,7 @@ const getBooksQuery = async (req, res) => {
     }
 };
 
-
+//===============================get book by id====================================================================
 
 const bookById = async function (req, res) {
 
@@ -153,6 +154,8 @@ const bookById = async function (req, res) {
     }
 }
 
+//================================update book api==========================================================
+
 const updateBook = async function (req, res) {
 
     try {
@@ -160,10 +163,10 @@ const updateBook = async function (req, res) {
         const reqBook = req.params.bookId
 
         if (!valid.invalidInput(reqBook)) {
-            return res.status(400).send({ status: false, msg: "pls provide bookId" })
+            return res.status(404).send({ status: false, msg: "pls provide bookId" })
         }
         if (!valid.isValidObjectId(reqBook)) {
-            return res.status(400).send({ status: false, msg: "invalid bookId" })
+            return res.status(404).send({ status: false, msg: "invalid bookId" })
         }
           if(reqBook){
             const checkId = await bookModel.findOne({_id:reqBook})
@@ -209,13 +212,15 @@ const updateBook = async function (req, res) {
         if (!valid.invalidInput(releasedAt)) {
             return res.status(400).send({ status: false, msg: "date should be in YYYY-MM-YY " })
         }
+        
+          const findBook = await bookModel.findOne({ _id:reqBook, isDeleted: false })
 
-        const updating = await bookModel.findByIdAndUpdate({ _id: reqBook, isDeleted: false }, {  title:title, excerpt:excerpt, releasedAt:releasedAt, ISBN:ISBN}, { new: true }).select({deletedAt:0})
-
-        if (!updating) {
-            return res.status(400).send({ status: false, msg: "book updatation failed" })
-        } else {
-            return res.status(200).send({ status: true, msg: "book updated successfully", data: updating })
+          if(findBook ){
+        const updating = await bookModel.findOneAndUpdate({ _id: reqBook, isDeleted: false }, 
+     {  title:title, excerpt:excerpt, releasedAt:releasedAt, ISBN:ISBN}, { new: true }).select({deletedAt:0})
+     return res.status(200).send({ status: true, msg: "book updated successfully", data: updating })
+        }else{
+            return res.status(400).send({status:false,msg:"book is already deleted"})
         }
     }
     catch (err) {
@@ -223,7 +228,7 @@ const updateBook = async function (req, res) {
     }
 }
 
-
+//========================================delete book api=======================================================
 const bookDeletion = async function (req, res) {
     try {
 
