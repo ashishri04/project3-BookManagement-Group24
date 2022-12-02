@@ -5,17 +5,19 @@ const bookModel = require("../models/bookModel")
 const authentication = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"];
-        if (!token) return res.status(401).send({ status: false, msg: " token must be present for authentication " })
+        if (!token) return res.status(401).send({ status: false, msg: " Token Required" })
 
         jwt.verify(token, "secret", function (err, decodedToken) {
             if (err) {
-                return res.status(400).send({ status: false, msg: "token invalid" });
+                return res.status(400).send({ status: false, msg: "Invalid Token or Token Expired" });
             } 
-        
-                req.decodedToken = decodedToken
+              req.decodedToken = decodedToken
                 next() 
         })
+        
+        
     } catch (err) {
+       
         res.status(500).send({ status: false, msg: err.message })
     }
 }
@@ -32,16 +34,17 @@ const authorization = async (req, res, next) => {
     
              let userId =    await bookModel.find({ _id: bookId }).select({ userId: 1, _id: 0 })
  
-    
+             let user =userId.map(x => x.userId)
+             
                 let id = decodedToken.userId
-                if (id != userId) return res.status(403).send({ status: false, msg: "You are not authorised to perform this task" })
+                if (id != user) return res.status(403).send({ status: false, msg: "Not Authorized !!" })
             }
             else {
                 let userID = req.body.userId
                 let ID = decodedToken.userId
                 
     
-                if (ID!= userID) return res.status(403).send({ status: false, msg: 'You are not authorised to perform this task' })
+                if (ID!= userID) return res.status(403).send({ status: false, msg: "Not Authorized !!" })
             }
     
             next();

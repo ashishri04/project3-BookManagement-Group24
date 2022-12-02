@@ -79,7 +79,7 @@ const bookCreation = async (req, res) => {
         }
 
 const bookDetails = await bookModel.create(requestBody)
-  return res.status(200).send({status:false,msg:"book created successfully",data:bookDetails})
+  return res.status(201).send({status:false,msg:"book created successfully",data:bookDetails})
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
     }
@@ -89,9 +89,9 @@ const bookDetails = await bookModel.create(requestBody)
 const getBooksQuery = async (req, res) => {
     try {
         const reqBody = req.query;
-        const { userId, category, subCategory } = reqBody
+        const { userId, category, subcategory } = reqBody
 
-        if ((Object.keys(reqBody).length === 0) || (userId || category || subCategory)) {
+        if ((Object.keys(reqBody).length === 0) || (userId || category || subcategory)) {
             if(reqBody.userId){
                
         
@@ -100,7 +100,7 @@ const getBooksQuery = async (req, res) => {
                 }
                 let checkUserId = await userModel.findById({_id: userId })
                 if (!checkUserId) {
-                    return res.status(400).send({ status: false, msg: " userId doesn't exist" })
+                    return res.status(404).send({ status: false, msg: " userId doesn't exist" })
                 }
             }
             //-------------------------------book finding----------------------------
@@ -129,10 +129,10 @@ const bookById = async function (req, res) {
         const reqBookId = req.params.bookId
 
         if (!valid.invalidInput(reqBookId)) {
-            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+            return res.status(400).send({ status: false, msg: "pls provide bookId" })
         }
         if (!valid.isValidObjectId(reqBookId)) {
-            return res.status(404).send({ status: false, msg: "invalid bookId" })
+            return res.status(400).send({ status: false, msg: "invalid bookId" })
         }
         let bookInfo = await bookModel.findOne({ _id: reqBookId, isDeleted: false })
         if (!bookInfo) {
@@ -160,10 +160,10 @@ const updateBook = async function (req, res) {
         const reqBook = req.params.bookId
 
         if (!valid.invalidInput(reqBook)) {
-            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+            return res.status(400).send({ status: false, msg: "pls provide bookId" })
         }
         if (!valid.isValidObjectId(reqBook)) {
-            return res.status(404).send({ status: false, msg: "invalid bookId" })
+            return res.status(400).send({ status: false, msg: "invalid bookId" })
         }
           if(reqBook){
             const checkId = await bookModel.findOne({_id:reqBook})
@@ -229,10 +229,10 @@ const bookDeletion = async function (req, res) {
 
         const removeBook = req.params.bookId
         if (!valid.invalidInput(removeBook)) {
-            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+            return res.status(400).send({ status: false, msg: "pls provide bookId" })
         }
         if (!valid.isValidObjectId(removeBook)) {
-            return res.status(404).send({ status: false, msg: "invalid bookId" })
+            return res.status(400).send({ status: false, msg: "invalid bookId" })
         }
           if(removeBook){
             const check= await bookModel.findOne({_id:removeBook,isDeleted:false})

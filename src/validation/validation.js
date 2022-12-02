@@ -81,10 +81,4 @@ function onlyNumbers(val){
 }
 
 
-
-
-
-
-
-
 module.exports = {isValidObjectId,isValidRequestBody,isValidName,invalidInput,isValidtitle,validatePhone,isValidEmail,isValidPassword,validateISBN,validPin,isValidStreet,onlyNumbers,date}
