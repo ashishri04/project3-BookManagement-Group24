@@ -70,7 +70,7 @@ const userCreation = async (req, res) => {
         }
 
         const createUser = await userModel.create(requestBody)
-        return res.status(200).send({ status: true, msg: " user created successfully", data: createUser })
+        return res.status(201).send({ status: true, msg: " user created successfully", data: createUser })
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })

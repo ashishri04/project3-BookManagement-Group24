@@ -61,7 +61,7 @@ const createReview = async function (req, res) {
         Obj.review = review
 
         if (isDeleted == true) {
-            return res.status(400).send({ status: false, msg: "you are deleting your data on the time of creation" })
+            return res.status(400).send({ status: false, msg: "Already deleted" })
         }
         Obj.isDeleted = isDeleted
         const reviewCreate = await reviewModel.create(Obj)

@@ -163,10 +163,10 @@ const updateBook = async function (req, res) {
         const reqBook = req.params.bookId
 
         if (!valid.invalidInput(reqBook)) {
-            return res.status(404).send({ status: false, msg: "pls provide bookId" })
+            return res.status(400).send({ status: false, msg: "pls provide bookId" })
         }
         if (!valid.isValidObjectId(reqBook)) {
-            return res.status(404).send({ status: false, msg: "invalid bookId" })
+            return res.status(400).send({ status: false, msg: "invalid bookId" })
         }
           if(reqBook){
             const checkId = await bookModel.findOne({_id:reqBook})
@@ -232,20 +232,23 @@ const updateBook = async function (req, res) {
 const bookDeletion = async function (req, res) {
     try {
 
-        const removeBook = req.params.bookId
-        if (!valid.invalidInput(removeBook)) {
+        const bookId = req.params.bookId
+       
+       
+        if (!valid.invalidInput(bookId)) {
             return res.status(400).send({ status: false, msg: "pls provide bookId" })
         }
-        if (!valid.isValidObjectId(removeBook)) {
+        if (!valid.isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "invalid bookId" })
         }
-          if(removeBook){
-            const check= await bookModel.findOne({_id:removeBook,isDeleted:false})
+       
+          if(bookId){
+            const check= await bookModel.findOne({_id:bookId,isDeleted:false})
             if(!check)
             return res.status(404).send({status:false,msg:"book already deleted"})
             
           }
-           let deleteBook = await bookModel.findByIdAndUpdate({ _id: removeBook }, { $set: { isDeleted: true ,deletedAt:Date.now()} }, { new: true })
+           let deleteBook = await bookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true ,deletedAt:Date.now()} }, { new: true })
      return res.status(200).send({status:false,msg:"book deleted successfull",data:deleteBook})
        
     }

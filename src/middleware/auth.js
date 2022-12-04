@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bookModel = require("../models/bookModel")
+const valid = require("../validation/validation")
 
 
 const authentication = function (req, res, next) {
@@ -30,6 +31,9 @@ const authorization = async (req, res, next) => {
             let decodedToken = jwt.verify(token, "secret")
     
             let bookId = req.params.bookId
+            if (!valid.isValidObjectId(bookId)) {
+                return res.status(400).send({ status: false, msg: "invalid bookId" })
+            }
             if (bookId) {
     
              let userId =    await bookModel.find({ _id: bookId }).select({ userId: 1, _id: 0 })
@@ -41,6 +45,9 @@ const authorization = async (req, res, next) => {
             }
             else {
                 let userID = req.body.userId
+                if (!valid.isValidObjectId(userID)) {
+                    return res.status(400).send({ status: false, msg: "invalid bookId" })
+                }
                 let ID = decodedToken.userId
                 
     
