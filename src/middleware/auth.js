@@ -43,9 +43,9 @@ const authorization = async (req, res, next) => {
             }
             else {
                 let userID = req.body.userId
-                if (!valid.isValidObjectId(userID)) {
-                    return res.status(400).send({ status: false, msg: "invalid bookId" })
-                }
+                // if (!valid.isValidObjectId(userID)) {
+                //     return res.status(400).send({ status: false, msg: "invalid bookId" })
+                // }
                 let ID = decodedToken.userId
                 
     

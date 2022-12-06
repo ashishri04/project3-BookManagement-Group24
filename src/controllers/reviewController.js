@@ -153,7 +153,7 @@ const updateReview = async function (req, res) {
     }
 }
 
-// =-----===============================================================================================================
+// ================================================================================================================
 
 const deleteReview = async function (req, res) {
     try {
@@ -206,3 +206,20 @@ const deleteReview = async function (req, res) {
 
 module.exports = { createReview, updateReview, deleteReview }
 
+// //=========================================================
+// const deleteReview = async function(req,res){
+//     try{
+// let bookID = req.params.bookID
+//     const bookExist = await bookModel.findOne({_id:bookID,isDeleted:false})
+//    let reviewId =req.params.reviewId
+//    const reviewExist = await reviewModel.findOne({_id:reviewId,isDeleted:false})
+
+//    let delete = await reviewModel.findByIdAndUpdate({_id:reviewId,_id:bookID,isDeleted:false},{$set:{isDeleted:true}},{new:true})
+
+//    const addCount =await bookModel.findOneAndUpdate({_id:bookID},{$inc{review:-1}},{new:true})
+
+//    return res.status(200).send({status:true,msg:"successfully deleted"})
+//     }catch(err){
+//         return res.status(500).send({status:false,msg:err.message})
+//     }
+// }

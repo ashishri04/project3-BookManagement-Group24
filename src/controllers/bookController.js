@@ -12,7 +12,7 @@ const bookCreation = async (req, res) => {
     try {
         let requestBody = req.body
 
-        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
+        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt,bookCover } = requestBody
         if (!valid.isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, msg: "request body can't be Empty" })
         }
@@ -77,6 +77,13 @@ const bookCreation = async (req, res) => {
         if (!valid.date(releasedAt)) {
             return res.status(400).send({ status: false, msg: " Released Date should be in format of YYYY-MM-YY " })
         }
+        if (!bookCover) {
+            return res.status(400).send({ status: false, msg: "bookCover is mandatory " })
+        }
+        if (!valid.invalidInput(bookCover)) {
+            return res.status(400).send({ status: false, msg: "please provide valid bookCover" })
+        }
+
 
 const bookDetails = await bookModel.create(requestBody)
   return res.status(201).send({status:false,msg:"book created successfully",data:bookDetails})
